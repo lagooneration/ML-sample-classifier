@@ -1,0 +1,44 @@
+# Models Directory
+
+This directory contains trained machine learning models for audio classification.
+
+## Current Models
+
+### Drum Classifier (`drum_classifier.pkl`)
+- **Type**: Random Forest Classifier
+- **Purpose**: Classify kick vs snare drum sounds
+- **Accuracy**: 83.3%
+- **Features**: 25 audio features (MFCC, spectral, time-domain)
+- **Training Data**: 20 drum samples (10 kick + 10 snare)
+
+## Model Files (Ignored by Git)
+
+The following model files are too large for git and are ignored:
+- `*.pkl` - Scikit-learn models
+- `*.h5` - Keras/TensorFlow models
+- `*.onnx` - ONNX format models
+- `*.tflite` - TensorFlow Lite models
+- `*.pt`, `*.pth` - PyTorch models
+
+## Usage
+
+Load models in your Python code:
+```python
+import pickle
+
+# Load drum classifier
+with open('models/drum_classifier.pkl', 'rb') as f:
+    model_data = pickle.load(f)
+    
+model = model_data['model']
+classes = model_data['class_names']
+```
+
+## Model Training
+
+Train new models using:
+```bash
+python scripts/train_drums.py --save_model
+```
+
+This will create a new `drum_classifier.pkl` file in this directory.

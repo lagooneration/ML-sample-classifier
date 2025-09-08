@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🥁 Drum Sound Classifier</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+        }
+        
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            max-width: 600px;
+            width: 90%;
+            text-align: center;
+        }
+        
+        .header {
+            margin-bottom: 2rem;
+        }
+        
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+        
+        .upload-area {
+            border: 3px dashed #667eea;
+            border-radius: 15px;
+            padding: 3rem 2rem;
+            margin: 2rem 0;
+            transition: all 0.3s ease;
+            background: #f8f9ff;
+        }
+        
+        .upload-area:hover {
+            border-color: #5a6fd8;
+            background: #f0f2ff;
+            transform: translateY(-2px);
+        }
+        
+        .upload-area.dragover {
+            border-color: #4CAF50;
+            background: #f0fff0;
+        }
+        
+        .upload-icon {
+            font-size: 3rem;
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .upload-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+        
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .file-info {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #e8f4fd;
+            border-radius: 10px;
+            border-left: 4px solid #2196F3;
+            display: none;
+        }
+        
+        .supported-formats {
+            margin-top: 2rem;
+            text-align: left;
+            background: #f9f9f9;
+            padding: 1.5rem;
+            border-radius: 10px;
+        }
+        
+        .supported-formats h3 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .format-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .format-tag {
+            background: #667eea;
+            color: white;
+            padding: 0.5rem;
+            border-radius: 25px;
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+        
+        .flash-messages {
+            margin-bottom: 1rem;
+        }
+        
+        .flash-message {
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 0.5rem;
+        }
+        
+        .flash-error {
+            background: #ffebee;
+            color: #c62828;
+            border-left: 4px solid #c62828;
+        }
+        
+        .loading {
+            display: none;
+            margin-top: 1rem;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .demo-section {
+            margin-top: 2rem;
+            text-align: left;
+            background: #fff9e6;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border-left: 4px solid #ff9800;
+        }
+        
+        .demo-section h3 {
+            color: #e65100;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .model-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .stat-item {
+            text-align: center;
+            background: white;
+            padding: 1rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🥁 Drum Sound Classifier</h1>
+            <p>Upload an audio file to classify drum sounds using machine learning.<br>
+               Built with Python, scikit-learn, and audio feature extraction.</p>
+        </div>
+        
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for message in messages %}
+                        <div class="flash-message flash-error">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        
+        <!-- Upload Form -->
+        <form id="upload-form" action="{{ url_for('upload_file') }}" method="post" enctype="multipart/form-data">
+            <div class="upload-area" id="upload-area">
+                <div class="upload-icon">🎵</div>
+                <h3>Drag & Drop Audio File Here</h3>
+                <p>or click to browse files</p>
+                <input type="file" name="file" id="file-input" class="file-input" accept=".wav,.mp3,.flac,.ogg,.m4a">
+                <button type="button" class="upload-btn" onclick="document.getElementById('file-input').click()">
+                    Choose Audio File
+                </button>
+            </div>
+            
+            <div class="file-info" id="file-info">
+                <strong>Selected File:</strong> <span id="file-name"></span><br>
+                <strong>Size:</strong> <span id="file-size"></span>
+            </div>
+            
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Analyzing audio and extracting features...</p>
+            </div>
+            
+            <button type="submit" class="upload-btn" id="classify-btn" style="display: none;">
+                🔍 Classify Drum Sound
+            </button>
+        </form>
+        
+        <!-- Supported Formats -->
+        <div class="supported-formats">
+            <h3>📁 Supported Audio Formats</h3>
+            <div class="format-grid">
+                <div class="format-tag">WAV</div>
+                <div class="format-tag">MP3</div>
+                <div class="format-tag">FLAC</div>
+                <div class="format-tag">OGG</div>
+                <div class="format-tag">M4A</div>
+            </div>
+        </div>
+        
+        <!-- Model Information -->
+        <div class="demo-section">
+            <h3>🤖 Model Information</h3>
+            <p>This classifier uses a Random Forest model trained on drum samples with 25 audio features including MFCC, spectral, and time-domain characteristics.</p>
+            <div class="model-stats">
+                <div class="stat-item">
+                    <div class="stat-value">83.3%</div>
+                    <div class="stat-label">Accuracy</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">2</div>
+                    <div class="stat-label">Classes</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">25</div>
+                    <div class="stat-label">Features</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">20</div>
+                    <div class="stat-label">Training Samples</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const uploadArea = document.getElementById('upload-area');
+        const fileInput = document.getElementById('file-input');
+        const fileInfo = document.getElementById('file-info');
+        const fileName = document.getElementById('file-name');
+        const fileSize = document.getElementById('file-size');
+        const classifyBtn = document.getElementById('classify-btn');
+        const uploadForm = document.getElementById('upload-form');
+        const loading = document.getElementById('loading');
+        
+        // Drag and drop functionality
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+        
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+        
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                fileInput.files = files;
+                handleFileSelect();
+            }
+        });
+        
+        fileInput.addEventListener('change', handleFileSelect);
+        
+        function handleFileSelect() {
+            const file = fileInput.files[0];
+            if (file) {
+                fileName.textContent = file.name;
+                fileSize.textContent = (file.size / (1024 * 1024)).toFixed(2) + ' MB';
+                fileInfo.style.display = 'block';
+                classifyBtn.style.display = 'inline-block';
+            }
+        }
+        
+        // Show loading when form is submitted
+        uploadForm.addEventListener('submit', () => {
+            loading.style.display = 'block';
+            classifyBtn.style.display = 'none';
+        });
+        
+        // File size validation
+        function validateFile(file) {
+            const maxSize = 16 * 1024 * 1024; // 16MB
+            if (file.size > maxSize) {
+                alert('File size too large. Please choose a file under 16MB.');
+                return false;
+            }
+            return true;
+        }
+        
+        fileInput.addEventListener('change', function() {
+            if (this.files[0] && !validateFile(this.files[0])) {
+                this.value = '';
+                fileInfo.style.display = 'none';
+                classifyBtn.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

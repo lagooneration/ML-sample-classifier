@@ -1,0 +1,345 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Flask stuff:
+instance/
+.webassets-cache
+
+# Scrapy stuff:
+.scrapy
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+target/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+# pipenv
+Pipfile.lock
+
+# PEP 582
+__pypackages__/
+
+# Celery stuff
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# Machine Learning & Data Science
+# Datasets (keep small sample data, ignore large datasets)
+data/raw/*.wav
+data/raw/*.mp3
+data/raw/*.flac
+data/raw/*.ogg
+data/raw/*.m4a
+data/processed/
+data/cache/
+data/temp/
+data/downloads/
+
+# Keep sample data structure but ignore actual files
+!data/raw/kick/.gitkeep
+!data/raw/snare/.gitkeep
+!data/sample/
+data/sample/*.wav
+data/sample/*.mp3
+!data/sample/README.md
+
+# Model files (usually too large for git)
+models/*.pkl
+models/*.h5
+models/*.onnx
+models/*.tflite
+models/*.pt
+models/*.pth
+models/*.joblib
+models/checkpoints/
+models/weights/
+
+# Keep model directory structure
+!models/.gitkeep
+!models/README.md
+
+# Training outputs and logs
+results/
+logs/
+runs/
+wandb/
+mlruns/
+.tensorboard/
+tensorboard_logs/
+
+# Temporary files and caches
+*.tmp
+*.temp
+cache/
+.cache/
+temp/
+
+# Audio processing temporary files
+*.wav.tmp
+*.mp3.tmp
+audio_temp/
+processed_audio/
+
+# Jupyter notebook outputs (keep notebooks, ignore outputs)
+*.ipynb
+!notebooks/*.ipynb
+
+# But ignore notebook checkpoints and outputs
+notebooks/.ipynb_checkpoints/
+notebooks/*_checkpoint.ipynb
+
+# Flask uploads (temporary uploaded files)
+uploads/
+static/uploads/
+instance/uploads/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Windows
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.sublime-project
+.sublime-workspace
+
+# But keep VS Code settings that are useful for the project
+!.vscode/settings.json
+!.vscode/launch.json
+!.vscode/tasks.json
+
+# Configuration files with sensitive data
+config.py
+config.json
+secrets.json
+.secrets
+credentials.json
+api_keys.txt
+
+# But keep example/template config files
+!config.example.py
+!config.template.json
+
+# Package lock files (uncomment if using specific package managers)
+# package-lock.json
+# yarn.lock
+
+# Audio analysis artifacts
+spectrograms/
+waveforms/
+feature_plots/
+analysis_cache/
+
+# Large files that shouldn't be in git
+*.zip
+*.tar
+*.tar.gz
+*.rar
+*.7z
+
+# But allow small documentation assets
+!docs/assets/*.png
+!docs/assets/*.jpg
+!README_assets/
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# Local development
+.local/
+local_config.py
+development.db
+
+# Testing
+.coverage
+htmlcov/
+.pytest_cache/
+test_outputs/
+
+# Documentation build
+_build/
+_static/
+_templates/
+
+# Profiling
+*.prof
+
+# Audio feature extraction cache
+mfcc_cache/
+spectral_cache/
+feature_cache/
+
+# Model training artifacts
+training_logs/
+validation_plots/
+confusion_matrices/
+training_history.json
+
+# Real-time processing temporary files
+realtime_buffer/
+audio_stream_cache/
+
+# Web application
+flask_session/
+static/temp/
+static/cache/
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Keep database schemas
+!database/schema.sql
+!database/migrations/
+
+# Log files
+*.log
+logs/
+application.log
+error.log
+debug.log
+
+# Temporary Python files
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment (in case someone creates it locally)
+venv*/
+env*/
+
+# Conda environment files
+.conda/
+conda-meta/
+
+# Performance profiling
+*.profile
+*.cProfile
+
+# Memory profiling
+*.mprof
+
+# GPU/CUDA cache
+.nv/
+
+# Audio metadata cache
+.audio_metadata/
+
+# FFmpeg temporary files
+ffmpeg_temp/
+
+# LibROSA cache
+librosa_cache/

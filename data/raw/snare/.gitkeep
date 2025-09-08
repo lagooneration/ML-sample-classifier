@@ -1,0 +1,9 @@
+# This file keeps the snare directory in git while ignoring the audio files
+# Place your snare drum samples (.wav, .mp3, etc.) in this directory
+# They will be ignored by git but the directory structure will be preserved
+
+## Expected files:
+- audio1.wav
+- audio2.wav
+- audio3.wav
+- ... (your snare drum samples)
