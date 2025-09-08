@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎯 Train Audio Model</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            min-height: 100vh;
+            padding: 2rem;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .nav-link {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            background: #6c757d;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        
+        .nav-link:hover {
+            background: #5a6268;
+            text-decoration: none;
+            color: white;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        
+        .panel {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .panel h2 {
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .upload-section {
+            margin-bottom: 2rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #495057;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: #4facfe;
+        }
+        
+        .file-input {
+            border: 2px dashed #4facfe;
+            padding: 2rem;
+            text-align: center;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .file-input:hover {
+            background: #f8f9fa;
+        }
+        
+        .file-input input {
+            display: none;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.4);
+        }
+        
+        .btn-success {
+            background: linear-gradient(45deg, #43e97b 0%, #38f9d7 100%);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(67, 233, 123, 0.4);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(245, 87, 108, 0.4);
+        }
+        
+        .status-card {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+        
+        .class-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            background: #e9ecef;
+            border-radius: 5px;
+            margin-bottom: 0.5rem;
+        }
+        
+        .class-name {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .sample-count {
+            background: #6c757d;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 10px;
+            font-size: 0.875rem;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, #43e97b 0%, #38f9d7 100%);
+            width: 0%;
+            transition: width 0.3s;
+        }
+        
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert-danger {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .alert-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #4facfe;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 Train Audio Classification Model</h1>
+            <p>Upload audio samples for different classes and train your custom model</p>
+            <a href="/" class="nav-link">← Back to Home</a>
+            <a href="/test" class="nav-link">Test Model →</a>
+        </div>
+        
+        <div class="main-content">
+            <!-- Upload Section -->
+            <div class="panel">
+                <h2>📁 Upload Training Data</h2>
+                
+                <div class="upload-section">
+                    <form id="uploadForm" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="className">Class Name:</label>
+                            <input type="text" id="className" name="class_name" class="form-control" 
+                                   placeholder="e.g., kick, snare, guitar, piano..." required>
+                            <small style="color: #6c757d;">Use descriptive names like 'kick_drum', 'acoustic_guitar', etc.</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Audio Files:</label>
+                            <div class="file-input" onclick="document.getElementById('audioFiles').click()">
+                                <input type="file" id="audioFiles" name="files" multiple accept=".wav,.mp3,.flac,.ogg,.m4a">
+                                <div>
+                                    📁 Click to select audio files<br>
+                                    <small>Supports WAV, MP3, FLAC, OGG, M4A</small>
+                                </div>
+                            </div>
+                            <div id="fileList" style="margin-top: 1rem;"></div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">📤 Upload Files</button>
+                    </form>
+                </div>
+                
+                <div id="uploadStatus"></div>
+            </div>
+            
+            <!-- Status Section -->
+            <div class="panel">
+                <h2>📊 Training Status</h2>
+                
+                <div id="statusContent">
+                    <div class="status-card">
+                        <h4>Model Status</h4>
+                        <p id="modelStatus">{{ 'Trained' if status.model_trained else 'Not Trained' }}</p>
+                        {% if status.accuracy %}
+                        <p>Accuracy: <strong>{{ "%.1f"|format(status.accuracy * 100) }}%</strong></p>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="status-card">
+                        <h4>Training Data</h4>
+                        <p>Total Samples: <strong id="totalSamples">{{ status.total_samples }}</strong></p>
+                        <p>Classes: <strong id="totalClasses">{{ status.classes|length }}</strong></p>
+                    </div>
+                    
+                    <div id="classesList">
+                        <h4>Classes:</h4>
+                        {% for class_info in status.classes %}
+                        <div class="class-item">
+                            <span class="class-name">{{ class_info.name }}</span>
+                            <div>
+                                <span class="sample-count">{{ class_info.samples }} samples</span>
+                                <button onclick="deleteClass('{{ class_info.name }}')" class="btn btn-danger" style="margin-left: 0.5rem; padding: 0.25rem 0.5rem; font-size: 0.8rem;">🗑️</button>
+                            </div>
+                        </div>
+                        {% else %}
+                        <p style="color: #6c757d; font-style: italic;">No training data uploaded yet</p>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <div style="margin-top: 2rem;">
+                    <button id="trainBtn" onclick="startTraining()" class="btn btn-success" 
+                            {{ 'disabled' if status.total_samples < 2 else '' }}>
+                        🚀 Start Training
+                    </button>
+                    <button onclick="refreshStatus()" class="btn btn-primary" style="margin-left: 0.5rem;">
+                        🔄 Refresh
+                    </button>
+                </div>
+                
+                <div id="trainingProgress" class="hidden">
+                    <h4>Training in Progress...</h4>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <p id="progressText">Preparing training data...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // File upload handling
+        document.getElementById('audioFiles').addEventListener('change', function(e) {
+            const fileList = document.getElementById('fileList');
+            const files = Array.from(e.target.files);
+            
+            if (files.length > 0) {
+                fileList.innerHTML = '<h5>Selected Files:</h5>' + 
+                    files.map(file => `<div>📄 ${file.name} (${(file.size/1024/1024).toFixed(2)} MB)</div>`).join('');
+            } else {
+                fileList.innerHTML = '';
+            }
+        });
+        
+        // Upload form submission
+        document.getElementById('uploadForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData();
+            const className = document.getElementById('className').value.trim();
+            const files = document.getElementById('audioFiles').files;
+            
+            if (!className) {
+                showAlert('Please enter a class name', 'danger');
+                return;
+            }
+            
+            if (files.length === 0) {
+                showAlert('Please select audio files', 'danger');
+                return;
+            }
+            
+            formData.append('class_name', className);
+            for (let file of files) {
+                formData.append('files', file);
+            }
+            
+            try {
+                showAlert('Uploading files...', 'info');
+                const response = await fetch('/upload_training', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showAlert(`Successfully uploaded ${result.total_uploaded} files to class "${className}"`, 'success');
+                    document.getElementById('uploadForm').reset();
+                    document.getElementById('fileList').innerHTML = '';
+                    refreshStatus();
+                } else {
+                    showAlert(result.error || 'Upload failed', 'danger');
+                }
+                
+                if (result.errors && result.errors.length > 0) {
+                    showAlert('Some files had errors: ' + result.errors.join(', '), 'danger');
+                }
+                
+            } catch (error) {
+                showAlert('Upload failed: ' + error.message, 'danger');
+            }
+        });
+        
+        // Training functions
+        async function startTraining() {
+            const trainBtn = document.getElementById('trainBtn');
+            const progressDiv = document.getElementById('trainingProgress');
+            
+            trainBtn.disabled = true;
+            progressDiv.classList.remove('hidden');
+            
+            // Simulate progress
+            let progress = 0;
+            const progressInterval = setInterval(() => {
+                progress += Math.random() * 20;
+                if (progress > 90) progress = 90;
+                document.getElementById('progressFill').style.width = progress + '%';
+                document.getElementById('progressText').textContent = `Training model... ${Math.round(progress)}%`;
+            }, 500);
+            
+            try {
+                const response = await fetch('/start_training', { method: 'POST' });
+                const result = await response.json();
+                
+                clearInterval(progressInterval);
+                document.getElementById('progressFill').style.width = '100%';
+                
+                if (result.success) {
+                    document.getElementById('progressText').textContent = 
+                        `Training completed! Accuracy: ${(result.accuracy * 100).toFixed(1)}%`;
+                    showAlert(`Model trained successfully! Accuracy: ${(result.accuracy * 100).toFixed(1)}%`, 'success');
+                    setTimeout(() => {
+                        progressDiv.classList.add('hidden');
+                        refreshStatus();
+                    }, 3000);
+                } else {
+                    document.getElementById('progressText').textContent = 'Training failed: ' + result.error;
+                    showAlert('Training failed: ' + result.error, 'danger');
+                    setTimeout(() => progressDiv.classList.add('hidden'), 3000);
+                }
+                
+            } catch (error) {
+                clearInterval(progressInterval);
+                showAlert('Training failed: ' + error.message, 'danger');
+                progressDiv.classList.add('hidden');
+            } finally {
+                trainBtn.disabled = false;
+            }
+        }
+        
+        async function refreshStatus() {
+            try {
+                const response = await fetch('/training_status');
+                const status = await response.json();
+                
+                // Update status display
+                document.getElementById('modelStatus').textContent = status.model_trained ? 'Trained' : 'Not Trained';
+                document.getElementById('totalSamples').textContent = status.total_samples;
+                document.getElementById('totalClasses').textContent = status.classes.length;
+                
+                // Update classes list
+                const classesList = document.getElementById('classesList');
+                if (status.classes.length > 0) {
+                    classesList.innerHTML = '<h4>Classes:</h4>' + status.classes.map(cls => 
+                        `<div class="class-item">
+                            <span class="class-name">${cls.name}</span>
+                            <div>
+                                <span class="sample-count">${cls.samples} samples</span>
+                                <button onclick="deleteClass('${cls.name}')" class="btn btn-danger" style="margin-left: 0.5rem; padding: 0.25rem 0.5rem; font-size: 0.8rem;">🗑️</button>
+                            </div>
+                        </div>`
+                    ).join('');
+                } else {
+                    classesList.innerHTML = '<h4>Classes:</h4><p style="color: #6c757d; font-style: italic;">No training data uploaded yet</p>';
+                }
+                
+                // Update train button
+                document.getElementById('trainBtn').disabled = status.total_samples < 2;
+                
+            } catch (error) {
+                console.error('Failed to refresh status:', error);
+            }
+        }
+        
+        async function deleteClass(className) {
+            if (!confirm(`Are you sure you want to delete all samples from class "${className}"?`)) {
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/delete_class/${className}`, { method: 'DELETE' });
+                const result = await response.json();
+                
+                if (result.success) {
+                    showAlert(result.message, 'success');
+                    refreshStatus();
+                } else {
+                    showAlert(result.message || 'Failed to delete class', 'danger');
+                }
+            } catch (error) {
+                showAlert('Error deleting class: ' + error.message, 'danger');
+            }
+        }
+        
+        function showAlert(message, type) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.textContent = message;
+            
+            const statusDiv = document.getElementById('uploadStatus');
+            statusDiv.innerHTML = '';
+            statusDiv.appendChild(alertDiv);
+            
+            // Auto-hide success and info alerts
+            if (type === 'success' || type === 'info') {
+                setTimeout(() => {
+                    alertDiv.style.transition = 'opacity 0.5s';
+                    alertDiv.style.opacity = '0';
+                    setTimeout(() => statusDiv.removeChild(alertDiv), 500);
+                }, 3000);
+            }
+        }
+    </script>
+</body>
+</html>

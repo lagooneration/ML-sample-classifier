@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🥁 Classification Results - Drum Sound Classifier</title>
+    <title>🎵 Classification Results - Audio Classifier</title>
     <style>
         * {
             margin: 0;
@@ -13,7 +13,7 @@
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
             min-height: 100vh;
             padding: 2rem 0;
             color: #333;
@@ -44,6 +44,28 @@
             align-items: center;
             justify-content: center;
             gap: 0.5rem;
+        }
+        
+        .nav-links {
+            margin-top: 1rem;
+        }
+        
+        .nav-link {
+            display: inline-block;
+            margin: 0.25rem;
+            padding: 0.5rem 1rem;
+            background: #6c757d;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s;
+            font-size: 0.9rem;
+        }
+        
+        .nav-link:hover {
+            background: #5a6268;
+            text-decoration: none;
+            color: white;
         }
         
         .back-btn {
@@ -301,6 +323,11 @@
     <div class="container">
         <div class="header">
             <h1>🎯 Classification Results</h1>
+            <div class="nav-links">
+                <a href="/" class="nav-link">🏠 Home</a>
+                <a href="/test" class="nav-link">🧪 Test Another</a>
+                <a href="/train" class="nav-link">🎯 Train Model</a>
+            </div>
         </div>
         
         <!-- Main Result Card -->
