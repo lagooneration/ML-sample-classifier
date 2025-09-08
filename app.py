@@ -511,14 +511,19 @@ def health():
     })
 
 if __name__ == '__main__':
-    print("🥁 Starting Drum Classifier Web App")
+    print("🎵 Starting Audio Classification Web App")
     print("=" * 50)
     
     # Load the trained model
     if load_model():
         print("🚀 Starting Flask server...")
-        print("📱 Open your browser to: http://localhost:5000")
-        app.run(debug=True, host='0.0.0.0', port=5000)
+        
+        # Get port from environment variable (for Heroku/Railway)
+        import os
+        port = int(os.environ.get('PORT', 5000))
+        
+        print(f"📱 Server will run on port: {port}")
+        app.run(debug=False, host='0.0.0.0', port=port)
     else:
         print("❌ Cannot start app - model not found!")
         print("💡 Train a model first using: python scripts/train_drums.py")
